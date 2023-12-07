@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rpa-invoces-deployment
+spec:
+  schedule: "00 12 1 * *"
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          containers:
+          - name: rpa-invoces
+            image: joaoallmeida/rpa-faturas:0.0.1
+            envFrom:
+              - secretRef:
+                  name: credentials
+          restartPolicy: OnFailure
+        
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: credentials
+type: Opaque
+data:
+  BRK_USER: Z2lzZWxl
+  BRK_PASSWORD: R2l
+  ENEL_USER: am9hb2FsbG1l
+  ENEL_PASSWORD: UDRsb
+  ENEL_KEY: QUl6YVN5QXo

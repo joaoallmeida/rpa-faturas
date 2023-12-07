@@ -1,0 +1,90 @@
+@host = portalhome.eneldistribuicaosp.com.br
+@email = #EMAIL
+@password = #SENHA
+@key = #KEY GERADA NO SITE DA ENEL
+
+###
+# @name login
+POST https://{{ host }}/api/firebase/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "I_CANAL": "ZINT",
+    "I_EMAIL": "{{email}}",
+    "I_PASSWORD": "{{password}}"
+}
+
+###
+# @name veryfyToken
+@authToken = {{ login.response.body.token }}
+
+POST https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key={{key}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "{{ authToken }}",
+    "returnSecureToken":true
+}
+
+###
+# @name token
+@refreshToken = {{ veryfyToken.response.body.refreshToken }}
+
+POST https://securetoken.googleapis.com/v1/token?key={{key}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token={{refreshToken}}
+
+###
+# @name login2
+@tokenId = {{ token.response.body.id_token }}
+
+POST https://{{host}}/api/sap/getloginv2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "I_CANAL":"ZINT",
+    "I_COBRADORA":"",
+    "I_CPF":"",
+    "I_CNPJ":"",
+    "I_ANLAGE":"",
+    "I_COD_SERV":"TC",
+    "I_LISTA_INST":"X",
+    "I_BANDEIRA":"X",
+    "I_FBIDTOKEN":"{{tokenId}}",
+    "I_VERTRAG":"",
+    "I_PARTNER":"",
+    "I_RESPOSTA_01":"",
+    "I_RESPOSTA_02":"",
+    "I_EXEC_LOGIN":"X",
+    "I_AMBIENTE":"PRD"
+}
+
+###
+@auth = {{ login2.response.headers.Authorization }}
+
+POST https://{{host}}/api/sap/changeinstallation HTTP/1.1
+Content-Type: application/json; charset=utf-8
+Authorization: {{auth}}
+
+{
+    "I_CANAL":"ZINT",
+    "I_COBRADORA":"",
+    "I_ANLAGE":"0029429919",
+    "I_COD_SERV":"TC",
+    "I_SERVICO":"A",
+    "I_VERTRAG":"0019900348",
+    "I_BANDEIRA":"X",
+    "I_AMBIENTE":"PRD"
+}
+
+###
+POST https://{{host}}/api/sap/portalinfo HTTP/1.1
+Content-Type: application/json
+Authorization: {{ auth }}
+
+{
+    "I_CANAL":"ZINT",
+    "I_COD_SERV":"TC",
+    "I_SSO_GUID":""
+}
