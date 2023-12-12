@@ -8,7 +8,7 @@ node {
 
     stage('Building Image') {
         
-        app = docker.build('joaoallmeida/rpa-faturas')
+        app = docker.build('joaoallmeida/rpa-faturas', '-f docker/Dockerfile')
 
     }
 
