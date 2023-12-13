@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: rpa-invoces-deployment
 spec:
-  schedule: "00 12 1 * *"
+  schedule: cronSchedule
   jobTemplate:
     spec:
       backoffLimit: 3
@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
           - name: rpa-invoces
-            image: joaoallmeida/rpa-faturas:0.0.1
+            image: joaoallmeida/rpa-faturas:latest
             envFrom:
               - secretRef:
                   name: credentials
