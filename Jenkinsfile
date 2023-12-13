@@ -1,4 +1,4 @@
-node("python3") {
+node {
 
     stage('Clone repository') {
         checkout scm
