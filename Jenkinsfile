@@ -24,7 +24,7 @@ node {
 
     stage('Deploy Kubernetes') {
 
-       kubernetesDeploy(configs: "kubernetes/rpaDeployment.yaml")
+       kubernetes.deploy(configs: "kubernetes/rpaDeployment.yaml")
 
     }
 
