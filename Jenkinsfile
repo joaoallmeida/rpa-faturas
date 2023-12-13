@@ -1,15 +1,11 @@
-node {
-
-    def app
+node("python3") {
 
     stage('Clone repository') {
         checkout scm
     }
 
     stage('Building Image') {
-        
         app = docker.build('joaoallmeida/rpa-faturas')
-
     }
 
     stage('Push Image'){
