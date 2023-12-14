@@ -6,7 +6,7 @@ node {
     }
 
     stage('Building Image') {
-        app = docker.build("joaoallmeida/rpa-faturas","--no-cache")
+        app = docker.build("joaoallmeida/rpa-faturas")
     }
 
     stage('Push Image') {
