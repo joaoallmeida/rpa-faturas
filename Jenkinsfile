@@ -1,4 +1,4 @@
-podTemplate {
+podTemplate(yaml: readTrusted('Kubernetes/deploy.yaml')) {
 
     node {
 
@@ -23,11 +23,13 @@ podTemplate {
 
         }
 
+    }
+    node(POD_LABEL) {
+
         stage('Deploy Kubernetes') {
 
             kubernetesDeploy(configs: 'Kubernetes/deploy.yaml')
-
         }
-
     }
+
 }
