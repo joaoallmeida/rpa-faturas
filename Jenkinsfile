@@ -1,12 +1,12 @@
+
 node {
 
-    stage('Clone repository') {
+    stage('Clone Repo') {
         checkout scm
     }
 
-
     stage('Building Image') {
-        app = docker.build('joaoallmeida/rpa-faturas')
+        app = docker.build('joaoallmeida/rpa-faturas','--no-cache')
     }
 
     stage('Push Image') {
@@ -18,13 +18,13 @@ node {
 
     stage('Set Kubernetes Variables') {
 
-        sh "sed -i 's|cronSchedule|${CronJob}|' kubernetes/rpaDeployment.yaml"
+        sh "sed -i 's|cronSchedule|${CronJob}|' Docker/Kubernetes/deploy.yaml"
 
     }
 
     stage('Deploy Kubernetes') {
 
-       kubernetes.deploy(configs: "kubernetes/rpaDeployment.yaml")
+        kubernetesDeploy(configs: 'Docker/Kubernetes/deploy.yaml')
 
     }
 
