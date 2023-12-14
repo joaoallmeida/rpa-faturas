@@ -18,13 +18,13 @@ node {
 
     stage('Set Kubernetes Variables') {
 
-        sh "sed -i 's|cronSchedule|${CronJob}|' Docker/Kubernetes/deploy.yaml"
+        sh "sed -i 's|cronSchedule|${CronJob}|' Kubernetes/deploy.yaml"
 
     }
 
     stage('Deploy Kubernetes') {
 
-        kubernetesDeploy(configs: 'Docker/Kubernetes/deploy.yaml')
+        kubernetesDeploy(configs: 'Kubernetes/deploy.yaml')
 
     }
 
