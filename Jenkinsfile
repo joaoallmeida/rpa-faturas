@@ -1,35 +1,29 @@
-podTemplate(yaml: readTrusted('Kubernetes/deploy.yaml')) {
+node {
 
-    node {
+    stage('Clone Repo') {
+        checkout scm
+    }
 
-        stage('Clone Repo') {
-            checkout scm
+    stage('Building Image') {
+        app = docker.build("joaoallmeida/rpa-faturas")
+    }
+
+    stage('Push Image') {
+        docker.withRegistry('https://registry.hub.docker.com','dockerHubCredentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
+    }
 
-        stage('Building Image') {
-            app = docker.build("joaoallmeida/rpa-faturas")
-        }
+    stage('Set Kubernetes Variables') {
 
-        stage('Push Image') {
-            docker.withRegistry('https://registry.hub.docker.com','dockerHubCredentials') {
-                app.push("${env.BUILD_NUMBER}")
-                app.push("latest")
-            }
-        }
-
-        stage('Set Kubernetes Variables') {
-
-            sh "sed -i 's|cronSchedule|${CronJob}|' Kubernetes/deploy.yaml"
-
-        }
+        sh "sed -i 's|cronSchedule|${CronJob}|' Kubernetes/deploy.yaml"
 
     }
-    node(POD_LABEL) {
 
-        stage('Deploy Kubernetes') {
+    stage('Deploy Kubernetes') {
 
-            kubernetesDeploy(configs: 'Kubernetes/deploy.yaml')
-        }
+        kubernetesDeploy(configs: 'Kubernetes/deploy.yaml')
     }
 
 }
