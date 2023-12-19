@@ -3,24 +3,7 @@ node {
         checkout scm
     }
 }
-podTemplate(yaml: '''
-    apiVersion: v1
-    kind: Pod
-    spec:
-        containers:
-        - name: docker
-          image: docker:dind
-          command:
-          - cat
-          tty: true
-          volumeMounts:
-            - mountPath: /var/run/docker.sock
-              name: docker-sock
-        volumes:
-        - name: docker-sock
-          hostPath:
-            path: /var/run/docker.sock 
-    ''' ) {
+podTemplate(yaml: readTrusted('Kubernetes/docker-deployment.yml')) {
     node(POD_LABEL) {
         stage('Docker Login') {
             container('docker') {
