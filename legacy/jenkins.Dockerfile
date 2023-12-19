@@ -14,6 +14,10 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
 
 RUN apt-get update && apt-get install -y docker-ce-cli
 
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin
+
 USER jenkins
 
 RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
