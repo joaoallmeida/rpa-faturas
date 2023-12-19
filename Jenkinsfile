@@ -1,30 +1,44 @@
-node {
-    stage('Clone Repo') {
-        checkout scm
+pipeline {
+  agent {
+    kubernetes {
+      yamlFile 'Kubernetes/docker-deployment.yml'
+      retries 2
     }
-}
-podTemplate(yaml: readTrusted('Kubernetes/docker-deployment.yml')) {
-    node(POD_LABEL) {
-        stage('Docker Login') {
+  }
+  stages {
+    stage('Clone') {
+      steps {
+        checkout scm
+      }
+    } 
+    stage('Docker Login') {
+        steps {
             container('docker') {
                 sh 'docker login -u ${DockerUser} -p ${DockerPassword}'
             }
         }
-        stage('Build Image') {
-            container('docker') {
-                sh 'docker build -t joaoallmeida/rpa-faturas .'
-            }
+    } 
+    stage('Build Image') {
+      steps {
+        container('docker') {
+          sh 'docker build -t joaoallmeida/rpa-faturas .'
         }
-        stage('Push Image') {
-            container('docker') {
-                sh 'docker push -t joaoallmeida/rpa-faturas:${env.BUILD_NUMBER}'
-                sh 'docker push -t joaoallmeida/rpa-faturas:latest'
-            }
+      }
+    }
+     stage('Push Images') {
+      steps {
+        container('docker') {
+            sh 'docker push -t joaoallmeida/rpa-faturas:${env.BUILD_NUMBER}'
+            sh 'docker push -t joaoallmeida/rpa-faturas:latest'
         }
-        stage('Deploy K8s') {
-
-            sh 'kubectl apply -f Kubernetes/deploy.yaml'
-        
-        }
+    }
+    }
+  }
+    post {
+      always {
+        container('docker') {
+          sh 'docker logout'
+      }
+      }
     }
 }
