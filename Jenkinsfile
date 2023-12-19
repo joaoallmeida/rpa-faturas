@@ -3,7 +3,7 @@ node {
         checkout scm
     }
 }
-podTemplate(yaml: readTrusted('Kubernetes/docker-deployment.yml')) {
+podTemplate(yaml: readFile('Kubernetes/docker-deployment.yml')) {
     node(POD_LABEL) {
         stage('Docker Login') {
             container('docker') {
