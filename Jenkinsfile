@@ -1,5 +1,8 @@
 podTemplate(yaml: readTrusted('Kubernetes/docker-deployment.yml')) {
     node(POD_LABEL) {
+        stage('Clone Repo') {
+            checkout scm
+        }
         stage('Docker Login') {
             container('docker') {
                 sh 'docker login -u ${DockerUser} -p ${DockerPassword}'
