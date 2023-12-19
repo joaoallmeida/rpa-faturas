@@ -101,7 +101,7 @@ def main():
 
         message += f"*Gympass* 💪\nValor: *R$79,90* \nTipo Pagamento: *Debito Automatico* \nData Cobrança: *2023-{currentMonth}-20*\n\n"
         message += f"*Xbox Gamepass* 🎮\nValor: *R$29,99* \nTipo Pagamento: *Debito Automatico* \nData Cobrança: *2023-{currentMonth}-23*\n\n"
-        message += f"*YouTube* ▶\nValor: *R$20,00* \nTipo Pagamento: *Debito Automatico* \nData Cobrança: *2023-{currentMonth}-05*" 
+        message += f"*YouTube* ▶\nValor: *R$25,00* \nTipo Pagamento: *Debito Automatico* \nData Cobrança: *2023-{currentMonth}-05*" 
                 
         sendMessage(message)
 

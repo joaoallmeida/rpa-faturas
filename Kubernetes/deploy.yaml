@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: rpa-invoces-deployment
+  name: rpa-faturas-deployment
 spec:
   schedule: cronSchedule
   jobTemplate:
@@ -10,7 +10,7 @@ spec:
       template:
         spec:
           containers:
-          - name: rpa-invoces
+          - name: rpa-faturas
             image: joaoallmeida/rpa-faturas:latest
             envFrom:
               - secretRef:
