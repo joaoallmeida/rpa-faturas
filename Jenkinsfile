@@ -1,44 +1,26 @@
-pipeline {
-  agent {
-    kubernetes {
-      yamlFile 'Kubernetes/docker-deployment.yml'
-      retries 2
-    }
-  }
-  stages {
-    stage('Clone') {
-      steps {
+node {
+
+    stage('Clone Repo') {
         checkout scm
-      }
-    } 
-    stage('Docker Login') {
-        steps {
-            container('docker') {
-                sh 'docker login -u ${DockerUser} -p ${DockerPassword}'
-            }
-        }
-    } 
-    stage('Build Image') {
-      steps {
-        container('docker') {
-          sh 'docker build -t joaoallmeida/rpa-faturas .'
-        }
-      }
     }
-     stage('Push Images') {
-      steps {
-        container('docker') {
-            sh 'docker push -t joaoallmeida/rpa-faturas:${env.BUILD_NUMBER}'
-            sh 'docker push -t joaoallmeida/rpa-faturas:latest'
+
+    stage('Building Image') {
+        app = docker.build("joaoallmeida/rpa-faturas")
+    }
+
+    stage('Push Image') {
+        docker.withRegistry('https://registry.hub.docker.com','dockerHubCredentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
     }
+
+    stage('Set Kubernetes Variables') {
+        sh "sed -i 's|cronSchedule|${CronJob}|' Kubernetes/deploy.yaml"
     }
-  }
-    post {
-      always {
-        container('docker') {
-          sh 'docker logout'
-      }
-      }
+
+    stage('Deploy Kubernetes') {
+        kubernetesDeploy(configs: 'Kubernetes/deploy.yaml', kubeconfigId: "mykubeconfig")
     }
+
 }
