@@ -41,6 +41,7 @@ def faturaBrk(user:str, password:str) -> dict:
         
         else:
             logger.info('Sem faturas!')
+            return 0
 
     except Exception as e:
         raise e
@@ -71,6 +72,7 @@ def faturasEnel(user:str, password:str, key:str) -> dict:
             return record
         else:
             logger.info('Sem faturas!')
+            return 0
 
     except Exception as e:
         raise e
