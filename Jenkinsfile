@@ -28,11 +28,11 @@ node {
 
             sh "sed -i 's|cronSchedule|${CronJob}|' Kubernetes/deploy.yaml"
             sh "sed -i 's|latest|${env.BUILD_NUMBER}|' Kubernetes/deploy.yaml"
-            sh "sed -i 's|brkUser|brkUserEncoded|' Kubernetes/deploy.yaml"
-            sh "sed -i 's|brkPassword|brkPasswordEncoded|' Kubernetes/deploy.yaml"
-            sh "sed -i 's|enelUser|enelUserEncoded|' Kubernetes/deploy.yaml"
-            sh "sed -i 's|enelPassword|enelPasswordEncoded|' Kubernetes/deploy.yaml"
-            sh "sed -i 's|enelKey|brkUserEncoded|' Kubernetes/deploy.yaml"
+            sh "sed -i 's|brkUser|${brkUserEncoded}|' Kubernetes/deploy.yaml"
+            sh "sed -i 's|brkPassword|${brkPasswordEncoded}|' Kubernetes/deploy.yaml"
+            sh "sed -i 's|enelUser|${enelUserEncoded}|' Kubernetes/deploy.yaml"
+            sh "sed -i 's|enelPassword|${enelPasswordEncoded}|' Kubernetes/deploy.yaml"
+            sh "sed -i 's|enelKey|${enelKeyEncoded}|' Kubernetes/deploy.yaml"
         }   
     }
 
