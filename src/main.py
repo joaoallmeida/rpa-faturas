@@ -41,7 +41,7 @@ def faturaBrk(user:str, password:str) -> dict:
         
         else:
             logger.info('Sem faturas!')
-            return 0
+            return None
 
     except Exception as e:
         raise e
@@ -72,7 +72,7 @@ def faturasEnel(user:str, password:str, key:str) -> dict:
             return record
         else:
             logger.info('Sem faturas!')
-            return 0
+            return None
 
     except Exception as e:
         raise e
@@ -95,11 +95,11 @@ def main():
         message = ""
         message += "Olá Mestre. 🤖\nSegue seu resumo das cobranças a serem feitas nesse mês!\n\n"
 
-        if len(brkRecords) > 0:
+        if brkRecords is not None:
             for record in brkRecords:
                 message +=  f"*Brk* 💧\nValor: *R${record['valorTotal']}* \nTipo Pagamento: *Manual* \nVencimento: *{record['vencimento']}* \nStatus: {record['status']} \nBoleto: {record['codBoleto']}\n\n"
 
-        if len(enelRecords) > 0:
+        if enelRecords is not None:
             for record in enelRecords:
                 message += f"*Enel* 💡\nValor: *R${record['valorTotal']}* \nTipo Pagamento: *Debito Automatico* \nVencimento: *{record['vencimento']}* \nStatus: {record['status']} \nBoleto: {record['codBoleto']}\n\n"
 
