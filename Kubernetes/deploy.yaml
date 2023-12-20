@@ -24,8 +24,8 @@ metadata:
   name: credentials
 type: Opaque
 data:
-  BRK_USER: Z2lzZWxlYWxtZWlkYTc5QG91dGxvb2suY29t
-  BRK_PASSWORD: R2lzYTE5Nzk=
-  ENEL_USER: am9hb2FsbG1laWRhOTZAZ21haWwuY29t
-  ENEL_PASSWORD: UDRsbTNpckBz
-  ENEL_KEY: QUl6YVN5QXo0SnhORjNyaWo1TjBZMmdzQVRCVjhhbVlNdEMzTXpr
+  BRK_USER: brkUser
+  BRK_PASSWORD: brkPassword
+  ENEL_USER: enelUser
+  ENEL_PASSWORD: enelPassword
+  ENEL_KEY: enelKey
