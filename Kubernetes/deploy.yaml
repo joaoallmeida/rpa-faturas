@@ -6,7 +6,7 @@ spec:
   schedule: cronSchedule
   jobTemplate:
     spec:
-      backoffLimit: 3
+      backoffLimit: 1
       template:
         spec:
           containers:
